@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:32:18 by lzins             #+#    #+#             */
-/*   Updated: 2021/05/22 09:46:20 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/05/22 10:38:29 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void	say(t_param *p, char *message, int keep_lock)
 		return ;
 	}
 	gettimeofday(&tv, NULL);
-	printf("%ld %d %s\n",
-		tv.tv_sec * 1000 + tv.tv_usec, p->i_philo, message);
+	printf("%ld %d %s\n", tick(p, NULL), p->i_philo, message);
 	if (!keep_lock)
 		pthread_mutex_unlock(&p->speak_right);
 }
@@ -85,6 +84,7 @@ void	philo_eat(t_param *p)
 	say(p, "is eating", 0);
 	usleep(p->t_eat);
 	p->is_eating = 0;
+	tick(p, &p->last_eat);
 }
 
 void	philo_sleep(t_param *p)
@@ -148,7 +148,7 @@ void	print_end_simulation(pthread_mutex_t *speak_right)
 
 	gettimeofday(&tv, NULL);
 	printf("%ld End of simulation\n",
-		tv.tv_sec * 1000 + tv.tv_usec);
+		tv.tv_sec * 1000 + tv.tv_usec / 1000);
 	pthread_mutex_unlock(speak_right);
 }
 

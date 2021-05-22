@@ -21,7 +21,7 @@ typedef struct s_param
 	int	n_times_eat;
 	int	i_philo;
 	struct timeval	last_eat;
-	struct timeval	activity_begining;
+	struct timeval	begining;
 	int	is_init;
 	int	is_eating;
 	t_fork	*left;
@@ -37,7 +37,7 @@ int		ft_atoi(char *s);
 void	*ft_calloc(size_t n, size_t size);
 
 void	init_eat(t_param *p);
-void	update_eat(t_param *p);
+long	tick(t_param *p, struct timeval *tv);
 int		finished_activity(t_param *p, int t_activity);
 int		has_died(t_param *p);
 

@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:51:32 by lzins             #+#    #+#             */
-/*   Updated: 2021/05/22 09:18:41 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/05/22 10:39:37 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,5 @@ void	create_table(t_param *p_array, t_fork *forks_array)
 	}
 	i = -1;
 	while(++i < n_philo)
-		p_array[i].i_philo = i;
+		p_array[i].i_philo = i + 1;
 }
