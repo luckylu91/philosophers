@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:32:18 by lzins             #+#    #+#             */
-/*   Updated: 2021/05/22 10:38:29 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/05/22 10:49:30 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,14 +142,13 @@ void print_param(t_param *p)
 	printf("left=%p, righr=%p\n", p->left, p->right);
 }
 
-void	print_end_simulation(pthread_mutex_t *speak_right)
+void	print_end_simulation(t_param *p)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	printf("%ld End of simulation\n",
-		tv.tv_sec * 1000 + tv.tv_usec / 1000);
-	pthread_mutex_unlock(speak_right);
+	printf("%ld End of simulation\n", tick(p, NULL));
+	pthread_mutex_unlock(&p->speak_right);
 }
 
 int	main(int argc, char **argv)
@@ -204,7 +203,7 @@ int	main(int argc, char **argv)
 					p[i].stop_when_possible = 1;
 				while (++i < p[0].n_philo)
 					pthread_join(p[i].id, NULL);
-				print_end_simulation(&p[0].speak_right);
+				print_end_simulation(&p[0]);
 				quit(p, forks);
 				return (0);
 			}
