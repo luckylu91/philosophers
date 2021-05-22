@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:51:32 by lzins             #+#    #+#             */
-/*   Updated: 2021/05/22 01:51:36 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/05/22 09:18:41 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	create_table(t_param *p_array, t_fork *forks_array)
 	p_array[0].left = &forks_array[n_philo - 1];
 	p_array[0].right = &forks_array[0];
 	i = 0;
-	while (++i < n_philo - 1)
+	while (++i < n_philo)
 	{
 		p_array[i].left = &forks_array[i - 1];
 		p_array[i].right = &forks_array[i];

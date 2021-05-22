@@ -21,6 +21,7 @@ typedef struct s_param
 	int	n_times_eat;
 	int	i_philo;
 	struct timeval	last_eat;
+	struct timeval	activity_begining;
 	int	is_init;
 	int	is_eating;
 	t_fork	*left;
@@ -37,7 +38,9 @@ void	*ft_calloc(size_t n, size_t size);
 
 void	init_eat(t_param *p);
 void	update_eat(t_param *p);
+int		finished_activity(t_param *p, int t_activity);
 int		has_died(t_param *p);
+
 
 int		duplicate_param(t_param **p);
 int		create_forks(int n_philo, t_fork **forks_array);

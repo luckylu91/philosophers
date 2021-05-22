@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:32:18 by lzins             #+#    #+#             */
-/*   Updated: 2021/05/22 02:08:11 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/05/22 09:46:20 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	*philo_life(t_param *p)
 {
 	int	n_times_eat;
 
-	printf("Hello life, here %d inside thread %lu\n", p->i_philo, p->id);
+	// printf("Hello life, here %d inside thread %lu\n", p->i_philo, p->id);
 	n_times_eat = 0;
 	init_eat(p);
 	while (!p->stop_when_possible)
@@ -135,6 +135,23 @@ int	error_quit(t_param *p, t_fork *forks)
 	return (-1);
 }
 
+void print_param(t_param *p)
+{
+	printf("args: %d %d %d %d %d\n", p->n_philo, p->t_die, p->t_eat, p->t_sleep, p->n_times_eat);
+	printf("i: %d\n", p->i_philo);
+	printf("left=%p, righr=%p\n", p->left, p->right);
+}
+
+void	print_end_simulation(pthread_mutex_t *speak_right)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	printf("%ld End of simulation\n",
+		tv.tv_sec * 1000 + tv.tv_usec);
+	pthread_mutex_unlock(speak_right);
+}
+
 int	main(int argc, char **argv)
 {
 	t_param		*p;
@@ -163,6 +180,11 @@ int	main(int argc, char **argv)
 		return (error_quit(p, forks));
 	if (!ret)
 		create_table(p, forks);
+	//
+	i = -1;
+	while (++i < p[0].n_philo)
+		print_param(&p[i]);
+	//
 	i = -1;
 	while (++i < p[0].n_philo)
 	{
@@ -182,6 +204,7 @@ int	main(int argc, char **argv)
 					p[i].stop_when_possible = 1;
 				while (++i < p[0].n_philo)
 					pthread_join(p[i].id, NULL);
+				print_end_simulation(&p[0].speak_right);
 				quit(p, forks);
 				return (0);
 			}

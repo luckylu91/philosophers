@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:42:48 by lzins             #+#    #+#             */
-/*   Updated: 2021/05/22 01:53:44 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/05/22 09:46:33 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ void	update_eat(t_param *p)
 	gettimeofday(&tv, NULL);
 	p->last_eat = tv;
 }
+
+// int	finished_activity(t_param *p, int t_activity)
+// {
+// 	struct timeval	tv;
+
+// 	gettimeofday(&tv, NULL);
+// 	return (delta_time(p->activity_begining, tv) >= t_activity);
+// }
 
 int	has_died(t_param *p)
 {
