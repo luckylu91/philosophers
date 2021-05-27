@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:32:18 by lzins             #+#    #+#             */
-/*   Updated: 2021/05/22 10:49:30 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/05/27 10:07:51 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ void	putback_fork(t_param *p, int left)
 
 void	philo_eat(t_param *p)
 {
-	if (p->stop_when_possible)
-		return ;
+	// if (p->stop_when_possible)
+	// 	return ;
 	p->is_eating = 1;
 	say(p, "is eating", 0);
 	usleep(p->t_eat);
@@ -89,8 +89,8 @@ void	philo_eat(t_param *p)
 
 void	philo_sleep(t_param *p)
 {
-	if (p->stop_when_possible)
-		return ;
+	// if (p->stop_when_possible)
+	// 	return ;
 	say(p, "is sleeping", 0);
 	usleep(p->t_sleep);
 }
@@ -102,7 +102,8 @@ void	*philo_life(t_param *p)
 	// printf("Hello life, here %d inside thread %lu\n", p->i_philo, p->id);
 	n_times_eat = 0;
 	init_eat(p);
-	while (!p->stop_when_possible)
+	// while (!p->stop_when_possible)
+	while (1)
 	{
 		say(p, "is thinking", 0);
 		take_fork(p, 0);
@@ -201,6 +202,7 @@ int	main(int argc, char **argv)
 				i = -1;
 				while (++i < p[0].n_philo)
 					p[i].stop_when_possible = 1;
+				pthread_mutex_unlock(&p[0].speak_right);
 				while (++i < p[0].n_philo)
 					pthread_join(p[i].id, NULL);
 				print_end_simulation(&p[0]);
