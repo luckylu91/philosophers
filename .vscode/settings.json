@@ -5,6 +5,7 @@
 		"unistd.h": "c",
 		"philosophers.h": "c",
 		"string.h": "c",
-		"istream": "c"
+		"istream": "c",
+		"stdio.h": "c"
 	}
 }
