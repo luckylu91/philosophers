@@ -6,80 +6,79 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:51:32 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/14 12:54:56 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/14 23:46:48 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	duplicate_param(t_param **p)
+int	create_philos(t_table *table)
 {
-	int		i;
-	t_param	*p_array;
+	int	i;
 
-	p_array = ft_calloc((*p)->n_philo, sizeof(t_param));
-	if (!p_array)
+	table->philos = ft_calloc(table->params.n_philo, sizeof(t_philo));
+	if (!table->philos)
 		return (-1);
 	i = -1;
-	while (++i < (*p)->n_philo)
-		p_array[i] = **p;
-	free(*p);
-	*p = p_array;
+	while (++i < table->params.n_philo)
+	{
+		table->philos[i].params = &table->params;
+		table->philos[i].speak_right = &table->speak_right;
+		table->philos[i].i_philo = i + 1;
+		table->philos[i].begining = &table->beginning;
+	}
 	return (0);
 }
 
-int	create_forks(int n_philo, t_fork **forks_array)
+int	create_forks(t_table *table)
 {
 	int	i;
 	int	ret;
 
-	*forks_array = ft_calloc(n_philo, sizeof(t_fork));
-	if (!forks_array)
+	table->forks = ft_calloc(table->params.n_philo, sizeof(t_fork));
+	if (!table->forks)
 		return (-1);
 	ret = 0;
 	i = -1;
-	while (++i < n_philo && !ret)
+	while (++i < table->params.n_philo && !ret)
 	{
-		if (pthread_mutex_init((*forks_array) + i, NULL))
+		if (pthread_mutex_init(table->forks + i, NULL))
 			ret = -1;
 	}
-	return (0);
+	return (ret);
 }
 
-void	distrubute_forks(t_param *p_array, t_fork *forks_array)
+void	distrubute_forks(t_table *table)
 {
 	int	i;
-	int	n_philo;
 
-	n_philo = p_array[0].n_philo;
-	p_array[0].left = &forks_array[n_philo - 1];
-	p_array[0].right = &forks_array[0];
+	table->philos[0].left = &table->forks[table->params.n_philo - 1];
+	table->philos[0].right = &table->forks[0];
 	i = 0;
-	while (++i < n_philo)
+	while (++i < table->params.n_philo)
 	{
-		p_array[i].left = &forks_array[i - 1];
-		p_array[i].right = &forks_array[i];
+		table->philos[i].left = &table->forks[i - 1];
+		table->philos[i].right = &table->forks[i];
 	}
-	i = -1;
-	while(++i < n_philo)
-		p_array[i].i_philo = i + 1;
 }
 
-int	create_table(int argc, char **argv, t_param **p, t_fork **forks)
+int	create_table(int argc, char **argv, t_table **table)
 {
-	int			ret;
+	int	ret;
 
-	*p = NULL;
-	*forks = NULL;
+	*table = ft_calloc(1, sizeof(t_table));
+	if (!*table)
+		return (error_quit(*table));
 	ret = 0;
-	if (handle_args(argc, argv, p))
-		return (error_quit(*p, *forks));
-	if (pthread_mutex_init(&(*p)->speak_right, NULL))
-		return (error_quit(*p, *forks));
-	if (duplicate_param(p))
-		return (error_quit(*p, *forks));
-	if (create_forks((*p)[0].n_philo, forks))
-		return (error_quit(*p, *forks));
-	distrubute_forks(*p, *forks);
+	if (handle_args(argc, argv, *table))
+		return (error_quit(*table));
+	if (pthread_mutex_init(&(*table)->speak_right, NULL))
+		return (error_quit(*table));
+	if (create_philos(*table))
+		return (error_quit(*table));
+	if (create_forks(*table))
+		return (error_quit(*table));
+	distrubute_forks(*table);
+	gettimeofday(&(*table)->beginning, NULL);
 	return (0);
 }

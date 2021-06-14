@@ -1,21 +1,22 @@
 #include "philosophers.h"
 
-void quit(t_param *p, t_fork *forks)
+void quit(t_table *table)
 {
 	int	i;
 
-	if (p && forks)
+	if (table->philos && table->forks)
 	{
 		i = -1;
-		while (++i < p[0].n_philo)
-			pthread_mutex_destroy(&forks[i]);
+		while (++i < table->params.n_philo)
+			pthread_mutex_destroy(&table->forks[i]);
 	}
-	free(p);
-	free(forks);
+	free(table->philos);
+	free(table->forks);
+	free(table);
 }
 
-int	error_quit(t_param *p, t_fork *forks)
+int	error_quit(t_table *table)
 {
-	quit(p, forks);
+	quit(table);
 	return (-1);
 }

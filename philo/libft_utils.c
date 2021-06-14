@@ -43,3 +43,12 @@ void	*ft_calloc(size_t n, size_t size)
 		memset(res, 0, n * size);
 	return (res);
 }
+
+void	ft_bzero(void *m, size_t size)
+{
+	size_t i;
+
+	i = 0;
+	while (i < size)
+		((unsigned char *)m)[i++] = 0;
+}

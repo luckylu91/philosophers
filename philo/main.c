@@ -6,70 +6,123 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:32:18 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/14 12:57:34 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/14 23:37:11 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
 //
-// void print_param(t_param *p)
+// void print_param(t_table *t)
 // {
-// 	printf("args: %d %d %d %d %d\n", p->n_philo, p->t_die, p->t_eat,
-// 		p->t_sleep, p->n_times_eat);
-// 	printf("i: %d\n", p->i_philo);
-// 	printf("left=%p, right=%p\n", p->left, p->right);
+// 	printf("args: %d %d %d %d %d\n", t->params.n_philo, t->params.t_die, t->params.t_eat,
+// 		t->params.t_sleep, t->params.n_times_eat);
+// 	for (int i = 0; i < t->params.n_philo; i++)
+// 	{
+// 		printf("i: %d\n", t->philos[i].i_philo);
+// 		printf("left=%p, right=%p\n", t->philos[i].left, t->philos[i].right);
+// 	}
 // }
 
-void	print_end_simulation(t_param *p)
+void tell_death(t_table *table, t_philo *p)
+{
+	pthread_mutex_lock(&table->speak_right);
+	printf("%ld %d has died\n", tick(p, NULL), p->i_philo);
+}
+void tell_end(t_table *table)
+{
+	pthread_mutex_lock(&table->speak_right);
+	printf("All philosophers have eaten %d times\n", table->params.n_times_eat);
+}
+
+void	print_end_simulation(t_table *table)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	printf("%ld End of simulation\n", tick(p, NULL));
-	pthread_mutex_unlock(&p->speak_right);
+	printf("%ld End of simulation\n", tick(&table->philos[0], NULL));
+	// pthread_mutex_unlock(&table->speak_right);
+}
+
+int	test_end(t_table *table, int i)
+{
+	static int	n_done_eating = 0;
+
+	if (has_died(&table->philos[i]))
+	{
+		tell_death(table, &table->philos[i]);
+		return (1);
+	}
+	else if (table->params.n_times_eat >= 0)
+	{
+		if (table->philos[i].n_times_eaten >= table->params.n_times_eat)
+			n_done_eating++;
+		else
+			n_done_eating = 0;
+		if (n_done_eating >= table->params.n_philo)
+		{
+			tell_end(table);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+void	end_simulation(t_table *table)
+{
+	int	i;
+
+	i = -1;
+	while (++i < table->params.n_philo)
+		table->philos[i].stop_when_possible = 1;
+	pthread_mutex_unlock(&table->speak_right);
+	i = -1;
+	while (++i < table->params.n_philo)
+		pthread_mutex_unlock(&table->forks[i]);
+	i = -1;
+	while (++i < table->params.n_philo)
+		pthread_join(table->philos[i].id, NULL);
+	print_end_simulation(table);
+	quit(table);
 }
 
 int	main(int argc, char **argv)
 {
-	t_param		*p;
-	t_fork		*forks;
-	int			ret;
-	int			i;
+	t_table	*table;
+	// t_param		*p;
+	// t_fork		*forks;
+	int		i;
+	int		ret;
+	// int		n_done_eating;
+	// int		end;
 
 	setbuf(stdout, NULL);
-	if (create_table(argc, argv, &p, &forks))
+	if (create_table(argc, argv, &table))
 		return (1);
-	//
-	// i = -1;
-	// while (++i < p[0].n_philo)
-	// 	print_param(&p[i]);
-	//
+
+	// print_param(table);
+
 	i = -1;
-	while (++i < p[0].n_philo)
+	while (++i < table->params.n_philo)
 	{
-		if (pthread_create(&p[i].id, NULL, (void * (*)(void *))philo_life, &p[i]))
-			ret = -1;
+		if (pthread_create(&table->philos[i].id, NULL,
+				(void * (*)(void *))philo_life, &table->philos[i]))
+			return (error_quit(table));
 	}
-	while (!ret)
+	i = 0;
+	while (1)
 	{
-		i = -1;
-		while (++i < p[0].n_philo)
-		{
-			if (has_died(&p[i]))
+		// i = -1;
+		// while (++i < table->params.n_philo)
+		// {
+			if (test_end(table, i))
 			{
-				say(&p[i], "has died", 1);
-				i = -1;
-				while (++i < p[0].n_philo)
-					p[i].stop_when_possible = 1;
-				pthread_mutex_unlock(&p[0].speak_right);
-				while (++i < p[0].n_philo)
-					pthread_join(p[i].id, NULL);
-				print_end_simulation(&p[0]);
-				quit(p, forks);
+				end_simulation(table);
 				return (0);
 			}
-		}
+			if (++i == table->params.n_philo)
+				i = 0;
+		// }
 	}
 	return (0);
 }
