@@ -62,8 +62,10 @@ void	say(t_philo *p, char *message);
 void	take_fork(t_philo *p, int left);
 void	putback_fork(t_philo *p, int left);
 
+long	delta_time(struct timeval tv1, struct timeval tv2);
 void	init_eat(t_philo *p);
 long	tick(t_philo *p, struct timeval *tv);
+long	tick_table(t_table *table);
 int		finished_activity(t_philo *p, int t_activity);
 int		has_died(t_philo *p);
 

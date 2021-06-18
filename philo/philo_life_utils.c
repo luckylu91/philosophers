@@ -17,6 +17,8 @@ void	say(t_philo *p, char *message)
 
 void	take_fork(t_philo *p, int left)
 {
+	if (p->stop_when_possible)
+		return ;
 	if (left)
 	{
 		pthread_mutex_lock(p->left);

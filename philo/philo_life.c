@@ -8,15 +8,31 @@ static void	philo_eat(t_philo *p)
 	say(p, "is eating");
 	usleep(p->params->t_eat);
 	p->is_eating = 0;
-	tick(p, &p->last_eat);
+	tick(NULL, &p->last_eat);
 }
 
 static void	philo_sleep(t_philo *p)
 {
+	struct timeval	begin;
+	struct timeval	tv;
+	long			nap_time;
+
 	if (p->stop_when_possible)
 		return ;
 	say(p, "is sleeping");
 	usleep(p->params->t_sleep);
+	// gettimeofday(&begin, NULL);
+	// say(p, "is sleeping");
+	// nap_time = p->params->t_sleep;
+	// while (nap_time > 0)
+	// {
+	// 	if (nap_time < 10)
+	// 		usleep(nap_time);
+	// 	else
+	// 		usleep(10);
+	// 	gettimeofday(&tv, NULL);
+	// 	nap_time = p->params->t_sleep - delta_time(begin, tv);
+	// }
 }
 
 void	*philo_life(t_philo *p)

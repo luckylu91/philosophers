@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:32:18 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/14 23:37:11 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/15 08:45:14 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,6 @@ void tell_end(t_table *table)
 {
 	pthread_mutex_lock(&table->speak_right);
 	printf("All philosophers have eaten %d times\n", table->params.n_times_eat);
-}
-
-void	print_end_simulation(t_table *table)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	printf("%ld End of simulation\n", tick(&table->philos[0], NULL));
-	// pthread_mutex_unlock(&table->speak_right);
 }
 
 int	test_end(t_table *table, int i)
@@ -81,8 +72,11 @@ void	end_simulation(t_table *table)
 		pthread_mutex_unlock(&table->forks[i]);
 	i = -1;
 	while (++i < table->params.n_philo)
+	{
+		printf("%ld End of simulation (%d)\n", tick_table(table), i);
 		pthread_join(table->philos[i].id, NULL);
-	print_end_simulation(table);
+	}
+	printf("%ld End of simulation\n", tick_table(table));
 	quit(table);
 }
 
