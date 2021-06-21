@@ -6,23 +6,11 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:32:18 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/15 08:45:14 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/21 09:40:38 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-//
-// void print_param(t_table *t)
-// {
-// 	printf("args: %d %d %d %d %d\n", t->params.n_philo, t->params.t_die, t->params.t_eat,
-// 		t->params.t_sleep, t->params.n_times_eat);
-// 	for (int i = 0; i < t->params.n_philo; i++)
-// 	{
-// 		printf("i: %d\n", t->philos[i].i_philo);
-// 		printf("left=%p, right=%p\n", t->philos[i].left, t->philos[i].right);
-// 	}
-// }
 
 void tell_death(t_table *table, t_philo *p)
 {
@@ -71,52 +59,43 @@ void	end_simulation(t_table *table)
 	while (++i < table->params.n_philo)
 		pthread_mutex_unlock(&table->forks[i]);
 	i = -1;
-	while (++i < table->params.n_philo)
-	{
-		printf("%ld End of simulation (%d)\n", tick_table(table), i);
-		pthread_join(table->philos[i].id, NULL);
-	}
 	printf("%ld End of simulation\n", tick_table(table));
 	quit(table);
 }
 
-int	main(int argc, char **argv)
+int	launch_simulation(t_table *table)
 {
-	t_table	*table;
-	// t_param		*p;
-	// t_fork		*forks;
-	int		i;
-	int		ret;
-	// int		n_done_eating;
-	// int		end;
-
-	setbuf(stdout, NULL);
-	if (create_table(argc, argv, &table))
-		return (1);
-
-	// print_param(table);
+	int	i;
 
 	i = -1;
 	while (++i < table->params.n_philo)
 	{
 		if (pthread_create(&table->philos[i].id, NULL,
 				(void * (*)(void *))philo_life, &table->philos[i]))
-			return (error_quit(table));
+			return (1);
 	}
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	t_table	*table;
+	int		i;
+	int		ret;
+
+	if (create_table(argc, argv, &table))
+		return (error_quit(table));
+	if (launch_simulation(table))
+		return (error_quit(table));
 	i = 0;
 	while (1)
 	{
-		// i = -1;
-		// while (++i < table->params.n_philo)
-		// {
-			if (test_end(table, i))
-			{
-				end_simulation(table);
-				return (0);
-			}
-			if (++i == table->params.n_philo)
-				i = 0;
-		// }
+		if (test_end(table, i))
+		{
+			end_simulation(table);
+			return (0);
+		}
+		i = (i + 1) % table->params.n_philo;
 	}
 	return (0);
 }

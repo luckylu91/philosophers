@@ -29,7 +29,6 @@ typedef struct	s_philo
 	struct timeval	last_eat;
 	struct timeval	*begining;
 	int	is_init;
-	int	is_eating;
 	t_fork	*left;
 	t_fork	*right;
 	pthread_t	id;
@@ -39,11 +38,11 @@ typedef struct	s_philo
 
 typedef struct s_table
 {
-	t_params	params;
+	t_params		params;
 	pthread_mutex_t	speak_right;
 	t_philo			*philos;
 	t_fork			*forks;
-	struct timeval beginning;
+	struct timeval	beginning;
 }	t_table;
 
 void	ft_bzero(void *m, size_t size);

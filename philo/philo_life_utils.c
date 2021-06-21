@@ -20,15 +20,10 @@ void	take_fork(t_philo *p, int left)
 	if (p->stop_when_possible)
 		return ;
 	if (left)
-	{
 		pthread_mutex_lock(p->left);
-		say(p, "has taken the left fork");
-	}
 	else
-	{
 		pthread_mutex_lock(p->right);
-		say(p, "has taken the right fork");
-	}
+	say(p, "has taken a fork");
 }
 
 void	putback_fork(t_philo *p, int left)

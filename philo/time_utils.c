@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:42:48 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/15 09:01:21 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/21 08:58:56 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	has_died(t_philo *p)
 {
 	struct timeval	tv;
 
-	if (!p->is_init || p->is_eating)
+	if (!p->is_init)
 		return (0);
 	gettimeofday(&tv, NULL);
 	return (delta_time(p->last_eat, tv) >= p->params->t_die);

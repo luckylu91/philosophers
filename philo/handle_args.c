@@ -10,7 +10,7 @@ static int	usage_error(void)
 static int	value_error(void)
 {
 	ft_putstr_fd("Error (Value)\n\tOne of the arguments has an invalid value, " \
-		"n_philo > 0, other values >= 0\n", STDERR_FILENO);
+		"n_philo >= 2, other values >= 0\n", STDERR_FILENO);
 	ft_putstr_fd("\t./philosophers n_philo t_die t_eat " \
 		"t_sleep [n_times_eat]\n", STDERR_FILENO);
 	return (-1);
@@ -19,7 +19,6 @@ static int	value_error(void)
 static void	init_param_values(int argc, char **argv, t_table *t)
 {
 	t->params.n_philo = ft_atoi(argv[1]);
-	// table->params.philos->n_philo = table->params.n_philo;
 	t->params.t_die = ft_atoi(argv[2]);
 	t->params.t_eat = ft_atoi(argv[3]);
 	t->params.t_sleep = ft_atoi(argv[4]);
@@ -39,7 +38,7 @@ static int	invalid_param_values(int argc, char **argv, t_table *t)
 		if (invalid_numeric_arg(argv[i]))
 			return (1);
 	}
-	return (t->params.n_philo <= 0 || t->params.t_die < 0 || t->params.t_eat < 0
+	return (t->params.n_philo <= 1 || t->params.t_die < 0 || t->params.t_eat < 0
 		|| t->params.t_sleep < 0 || (argc == 6 && t->params.n_times_eat < 0));
 }
 

@@ -4,11 +4,9 @@ static void	philo_eat(t_philo *p)
 {
 	if (p->stop_when_possible)
 		return ;
-	p->is_eating = 1;
 	say(p, "is eating");
-	usleep(p->params->t_eat);
-	p->is_eating = 0;
 	tick(NULL, &p->last_eat);
+	usleep(1000 * p->params->t_eat);
 }
 
 static void	philo_sleep(t_philo *p)
@@ -20,7 +18,7 @@ static void	philo_sleep(t_philo *p)
 	if (p->stop_when_possible)
 		return ;
 	say(p, "is sleeping");
-	usleep(p->params->t_sleep);
+	usleep(1000 * p->params->t_sleep);
 	// gettimeofday(&begin, NULL);
 	// say(p, "is sleeping");
 	// nap_time = p->params->t_sleep;

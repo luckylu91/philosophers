@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:51:32 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/14 23:46:48 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/21 09:03:16 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,16 @@ int	create_table(int argc, char **argv, t_table **table)
 
 	*table = ft_calloc(1, sizeof(t_table));
 	if (!*table)
-		return (error_quit(*table));
+		return (1);
 	ret = 0;
 	if (handle_args(argc, argv, *table))
-		return (error_quit(*table));
+		return (1);
 	if (pthread_mutex_init(&(*table)->speak_right, NULL))
-		return (error_quit(*table));
+		return (1);
 	if (create_philos(*table))
-		return (error_quit(*table));
+		return (1);
 	if (create_forks(*table))
-		return (error_quit(*table));
+		return (1);
 	distrubute_forks(*table);
 	gettimeofday(&(*table)->beginning, NULL);
 	return (0);
