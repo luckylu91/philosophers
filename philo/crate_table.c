@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:51:32 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/21 09:03:16 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/21 19:22:55 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,16 @@ int	create_forks(t_table *table)
 	return (ret);
 }
 
-void	distrubute_forks(t_table *table)
+void	distribute_forks(t_table *table)
 {
 	int	i;
+	int	n;
 
-	table->philos[0].left = &table->forks[table->params.n_philo - 1];
-	table->philos[0].right = &table->forks[0];
-	i = 0;
+	n = table->params.n_philo;
+	i = -1;
 	while (++i < table->params.n_philo)
 	{
-		table->philos[i].left = &table->forks[i - 1];
+		table->philos[i].left = &table->forks[(i - 1) % n];
 		table->philos[i].right = &table->forks[i];
 	}
 }
@@ -70,15 +70,12 @@ int	create_table(int argc, char **argv, t_table **table)
 	if (!*table)
 		return (1);
 	ret = 0;
-	if (handle_args(argc, argv, *table))
+	if (handle_args(argc, argv, *table)
+			|| pthread_mutex_init(&(*table)->speak_right, NULL)
+			|| create_philos(*table)
+			|| create_forks(*table))
 		return (1);
-	if (pthread_mutex_init(&(*table)->speak_right, NULL))
-		return (1);
-	if (create_philos(*table))
-		return (1);
-	if (create_forks(*table))
-		return (1);
-	distrubute_forks(*table);
+	distribute_forks(*table);
 	gettimeofday(&(*table)->beginning, NULL);
 	return (0);
 }

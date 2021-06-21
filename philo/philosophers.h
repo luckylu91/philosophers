@@ -28,6 +28,7 @@ typedef struct	s_philo
 	int	i_philo;
 	struct timeval	last_eat;
 	struct timeval	*begining;
+	struct timeval action_begining;
 	int	is_init;
 	t_fork	*left;
 	t_fork	*right;
@@ -63,10 +64,11 @@ void	putback_fork(t_philo *p, int left);
 
 long	delta_time(struct timeval tv1, struct timeval tv2);
 void	init_eat(t_philo *p);
-long	tick(t_philo *p, struct timeval *tv);
+long	tick(t_philo *p);
 long	tick_table(t_table *table);
 int		finished_activity(t_philo *p, int t_activity);
 int		has_died(t_philo *p);
+void	corrected_sleep(int duration, struct timeval begining);
 
 int	create_table(int argc, char **argv, t_table **table);
 

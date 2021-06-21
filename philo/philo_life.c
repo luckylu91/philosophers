@@ -5,8 +5,9 @@ static void	philo_eat(t_philo *p)
 	if (p->stop_when_possible)
 		return ;
 	say(p, "is eating");
-	tick(NULL, &p->last_eat);
-	usleep(1000 * p->params->t_eat);
+	gettimeofday(&p->last_eat, NULL);
+	// usleep(1000 * p->params->t_eat);
+	corrected_sleep(p->params->t_eat, p->action_begining);
 }
 
 static void	philo_sleep(t_philo *p)
@@ -18,7 +19,9 @@ static void	philo_sleep(t_philo *p)
 	if (p->stop_when_possible)
 		return ;
 	say(p, "is sleeping");
-	usleep(1000 * p->params->t_sleep);
+	// usleep(1000 * p->params->t_sleep);
+	corrected_sleep(p->params->t_sleep, p->action_begining);
+
 	// gettimeofday(&begin, NULL);
 	// say(p, "is sleeping");
 	// nap_time = p->params->t_sleep;
@@ -39,14 +42,16 @@ void	*philo_life(t_philo *p)
 
 	// printf("Hello life, here %d inside thread %lu\n", p->i_philo, p->id);
 	n_times_eat = 0;
-	init_eat(p);
+	gettimeofday(&p->last_eat, NULL);
+	p->is_init = 1;
 	while (!p->stop_when_possible)
-	// while (1)
 	{
 		say(p, "is thinking");
-		take_fork(p, 0);
-		take_fork(p, 1);
+		take_fork(p, p->i_philo % 2);
+		take_fork(p, p->i_philo % 2 + 1);
+		gettimeofday(&p->action_begining, NULL);
 		philo_eat(p);
+		gettimeofday(&p->action_begining, NULL);
 		p->n_times_eaten++;
 		putback_fork(p, 0);
 		putback_fork(p, 1);

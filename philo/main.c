@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:32:18 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/21 09:40:38 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/21 19:43:04 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void tell_death(t_table *table, t_philo *p)
 {
 	pthread_mutex_lock(&table->speak_right);
-	printf("%ld %d has died\n", tick(p, NULL), p->i_philo);
+	printf("%ld %d has died\n", tick(p), p->i_philo);
 }
 void tell_end(t_table *table)
 {
@@ -83,9 +83,8 @@ int	main(int argc, char **argv)
 	int		i;
 	int		ret;
 
-	if (create_table(argc, argv, &table))
-		return (error_quit(table));
-	if (launch_simulation(table))
+	if (create_table(argc, argv, &table)
+			|| launch_simulation(table))
 		return (error_quit(table));
 	i = 0;
 	while (1)

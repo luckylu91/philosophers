@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:42:48 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/21 08:58:56 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/21 16:44:22 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,12 @@ long	delta_time(struct timeval tv1, struct timeval tv2)
 	return (tv2.tv_sec - tv1.tv_sec) * 1000 + (tv2.tv_usec - tv1.tv_usec) / 1000;
 }
 
-void	init_eat(t_philo *p)
-{
-	gettimeofday(&p->last_eat, NULL);
-	p->is_init = 1;
-}
-
-long	tick(t_philo *p, struct timeval *tparam)
+long	tick(t_philo *p)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	if (tparam)
-	{
-		*tparam = tv;
-		return (0);
-	}
-	else
-		return (delta_time(tv, *(p->begining)));
+	return (delta_time(tv, *(p->begining)));
 }
 
 long	tick_table(t_table *table)
@@ -61,4 +49,15 @@ int	has_died(t_philo *p)
 		return (0);
 	gettimeofday(&tv, NULL);
 	return (delta_time(p->last_eat, tv) >= p->params->t_die);
+}
+
+void	corrected_sleep(int duration, struct timeval begining)
+{
+	struct timeval	tv;
+	useconds_t		time_to_sleep;
+
+	gettimeofday(&tv, NULL);
+	time_to_sleep = 1000 * (duration - delta_time(begining, tv));
+	if (time_to_sleep > 0)
+		usleep(time_to_sleep);
 }
