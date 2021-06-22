@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 23:58:37 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/15 00:00:23 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/22 16:23:16 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ static char	*ft_strchr(const char *s, int c)
 	while (*s != '\0')
 	{
 		if (*s == c)
-			return ((char*)s);
+			return ((char *)s);
 		s++;
 	}
 	if (c == '\0')
-		return ((char*)s);
+		return ((char *)s);
 	return (NULL);
 }
 
 static int	ft_all_in(char *str, char *set)
 {
-	int i;
+	int	i;
 
 	if (!str)
 		return (1);

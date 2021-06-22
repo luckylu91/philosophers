@@ -46,7 +46,7 @@ void	*ft_calloc(size_t n, size_t size)
 
 void	ft_bzero(void *m, size_t size)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < size)

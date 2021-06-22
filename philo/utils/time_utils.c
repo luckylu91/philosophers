@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:42:48 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/21 16:44:22 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/22 17:11:34 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 long	delta_time(struct timeval tv1, struct timeval tv2)
 {
-	return (tv2.tv_sec - tv1.tv_sec) * 1000 + (tv2.tv_usec - tv1.tv_usec) / 1000;
+	return ((tv2.tv_sec - tv1.tv_sec) * 1000
+		+ (tv2.tv_usec - tv1.tv_usec) / 1000);
 }
 
 long	tick(t_philo *p)
@@ -22,7 +23,7 @@ long	tick(t_philo *p)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (delta_time(tv, *(p->begining)));
+	return (delta_time(*(p->begining), tv));
 }
 
 long	tick_table(t_table *table)
@@ -30,34 +31,17 @@ long	tick_table(t_table *table)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (delta_time(tv, table->beginning));
-}
-
-// int	finished_activity(t_param *p, int t_activity)
-// {
-// 	struct timeval	tv;
-
-// 	gettimeofday(&tv, NULL);
-// 	return (delta_time(p->activity_begining, tv) >= t_activity);
-// }
-
-int	has_died(t_philo *p)
-{
-	struct timeval	tv;
-
-	if (!p->is_init)
-		return (0);
-	gettimeofday(&tv, NULL);
-	return (delta_time(p->last_eat, tv) >= p->params->t_die);
+	return (delta_time(table->beginning, tv));
 }
 
 void	corrected_sleep(int duration, struct timeval begining)
 {
 	struct timeval	tv;
-	useconds_t		time_to_sleep;
 
 	gettimeofday(&tv, NULL);
-	time_to_sleep = 1000 * (duration - delta_time(begining, tv));
-	if (time_to_sleep > 0)
-		usleep(time_to_sleep);
+	while (delta_time(begining, tv) < duration)
+	{
+		usleep(10);
+		gettimeofday(&tv, NULL);
+	}
 }

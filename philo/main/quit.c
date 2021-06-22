@@ -1,6 +1,6 @@
 #include "philosophers.h"
 
-void quit(t_table *table)
+void	quit(t_table *table)
 {
 	int	i;
 
