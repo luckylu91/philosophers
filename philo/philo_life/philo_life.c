@@ -4,8 +4,8 @@ static void	philo_eat(t_philo *p)
 {
 	if (p->stop_when_possible)
 		return ;
-	gettimeofday(&p->last_eat, NULL);
 	say(p, "is eating");
+	gettimeofday(&p->last_eat, NULL);
 	corrected_sleep(p->params->t_eat, p->action_begining);
 }
 
@@ -21,22 +21,18 @@ void	*philo_life(t_philo *p)
 {
 	int	n_times_eat;
 
-	if (p->i_philo % 2 == 0)
-		usleep(10);
 	n_times_eat = 0;
 	gettimeofday(&p->last_eat, NULL);
 	p->is_init = 1;
 	while (!p->stop_when_possible)
 	{
 		say(p, "is thinking");
-		take_fork(p, 0);
-		take_fork(p, 1);
+		take_forks(p);
 		gettimeofday(&p->action_begining, NULL);
 		philo_eat(p);
 		gettimeofday(&p->action_begining, NULL);
 		p->n_times_eaten++;
-		putback_fork(p, 0);
-		putback_fork(p, 1);
+		putback_forks(p);
 		philo_sleep(p);
 	}
 	return (NULL);

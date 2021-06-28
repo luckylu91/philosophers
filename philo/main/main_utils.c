@@ -56,10 +56,5 @@ void	end_simulation(t_table *table)
 	while (++i < table->params.n_philo)
 		table->philos[i].stop_when_possible = 1;
 	pthread_mutex_unlock(&table->speak_right);
-	i = -1;
-	while (++i < table->params.n_philo)
-		pthread_mutex_unlock(&table->forks[i]);
-	i = -1;
-	printf("%ld End of simulation\n", tick_table(table));
 	quit(table);
 }

@@ -25,16 +25,19 @@ typedef struct s_philo
 {
 	t_params		*params;
 	pthread_mutex_t	*speak_right;
+	// int				**forks;
+	// pthread_mutex_t	*eat_right;
+	t_fork			*forks;
+	struct timeval	*begining;
 	int				i_philo;
 	struct timeval	last_eat;
-	struct timeval	*begining;
 	struct timeval	action_begining;
 	int				is_init;
-	t_fork			*left;
-	t_fork			*right;
 	pthread_t		id;
 	int				stop_when_possible;
 	int				n_times_eaten;
+	//
+	int				can_take_forks;
 }	t_philo;
 
 typedef struct s_table
@@ -42,7 +45,8 @@ typedef struct s_table
 	t_params		params;
 	pthread_mutex_t	speak_right;
 	t_philo			*philos;
-	t_fork			*forks;
+	int				*forks;
+	// pthread_mutex_t	eat_right;
 	struct timeval	beginning;
 }	t_table;
 
@@ -74,6 +78,10 @@ int		create_table(int argc, char **argv, t_table **table);
 
 // philo_life_utils
 void	say(t_philo *p, char *message);
+void	take_fork(t_philo *p, int left);
+void	putback_fork(t_philo *p, int left);
+// void	take_forks(t_philo *p);
+// void	putback_forks(t_philo *p);
 void	take_fork(t_philo *p, int left);
 void	putback_fork(t_philo *p, int left);
 
