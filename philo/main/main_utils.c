@@ -7,6 +7,7 @@ int	launch_simulation(t_table *table)
 	i = -1;
 	while (++i < table->params.n_philo)
 	{
+		usleep(100);
 		if (pthread_create(&table->philos[i].id, NULL,
 				(void *(*)(void *))philo_life, &table->philos[i]))
 			return (1);
@@ -16,12 +17,16 @@ int	launch_simulation(t_table *table)
 
 int	has_died(t_philo *p)
 {
+	int				ret;
 	struct timeval	tv;
 
 	if (!p->is_init)
 		return (0);
 	gettimeofday(&tv, NULL);
-	return (delta_time(p->last_eat, tv) >= p->params->t_die);
+	pthread_mutex_lock(&p->last_eat_lock);
+	ret = delta_time(p->last_eat, tv) >= p->params->t_die;
+	pthread_mutex_unlock(&p->last_eat_lock);
+	return (ret);
 }
 
 int	test_end(t_table *table, int i)

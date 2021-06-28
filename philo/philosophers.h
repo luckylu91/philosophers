@@ -27,6 +27,7 @@ typedef struct s_philo
 	pthread_mutex_t	*speak_right;
 	int				i_philo;
 	struct timeval	last_eat;
+	pthread_mutex_t	last_eat_lock;
 	struct timeval	*begining;
 	struct timeval	action_begining;
 	int				is_init;

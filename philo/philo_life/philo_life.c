@@ -4,7 +4,9 @@ static void	philo_eat(t_philo *p)
 {
 	if (p->stop_when_possible)
 		return ;
+	pthread_mutex_lock(&p->last_eat_lock);
 	gettimeofday(&p->last_eat, NULL);
+	pthread_mutex_unlock(&p->last_eat_lock);
 	say(p, "is eating");
 	corrected_sleep(p->params->t_eat, p->action_begining);
 }
@@ -21,16 +23,18 @@ void	*philo_life(t_philo *p)
 {
 	int	n_times_eat;
 
-	if (p->i_philo % 2 == 0)
-		usleep(10);
+	// if (p->i_philo % 2 == 0)
+	// 	usleep(10);
 	n_times_eat = 0;
 	gettimeofday(&p->last_eat, NULL);
 	p->is_init = 1;
 	while (!p->stop_when_possible)
 	{
 		say(p, "is thinking");
-		take_fork(p, 0);
+		// take_fork(p, p->i_philo % 2);
+		// take_fork(p, (p->i_philo + 1) % 2);
 		take_fork(p, 1);
+		take_fork(p, 0);
 		gettimeofday(&p->action_begining, NULL);
 		philo_eat(p);
 		gettimeofday(&p->action_begining, NULL);
