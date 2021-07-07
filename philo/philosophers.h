@@ -71,7 +71,7 @@ int		launch_simulation(t_table *table);
 
 // handle_args
 int		invalid_numeric_arg(char *arg);
-int		handle_args(int argc, char **argv, t_table *table);
+int		handle_args(int argc, char **argv, t_params *params);
 
 // create_table
 int		create_table(int argc, char **argv, t_table **table);
