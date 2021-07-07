@@ -6,7 +6,7 @@
 /*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:51:32 by lzins             #+#    #+#             */
-/*   Updated: 2021/06/14 23:46:48 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/06/23 15:20:35 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,59 +26,33 @@ int	create_philos(t_table *table)
 		table->philos[i].speak_right = &table->speak_right;
 		table->philos[i].i_philo = i + 1;
 		table->philos[i].begining = &table->beginning;
+		table->philos[i].forks = &table->forks;
+		table->philos[i].eat_right = &table->eat_right;
+		//
+		table->philos[i].can_take_forks = 1;
 	}
 	return (0);
 }
 
 int	create_forks(t_table *table)
 {
-	int	i;
-	int	ret;
-
-	table->forks = ft_calloc(table->params.n_philo, sizeof(t_fork));
+	table->forks = ft_calloc(table->params.n_philo, sizeof(int));
 	if (!table->forks)
 		return (-1);
-	ret = 0;
-	i = -1;
-	while (++i < table->params.n_philo && !ret)
-	{
-		if (pthread_mutex_init(table->forks + i, NULL))
-			ret = -1;
-	}
-	return (ret);
-}
-
-void	distrubute_forks(t_table *table)
-{
-	int	i;
-
-	table->philos[0].left = &table->forks[table->params.n_philo - 1];
-	table->philos[0].right = &table->forks[0];
-	i = 0;
-	while (++i < table->params.n_philo)
-	{
-		table->philos[i].left = &table->forks[i - 1];
-		table->philos[i].right = &table->forks[i];
-	}
+	return (0);
 }
 
 int	create_table(int argc, char **argv, t_table **table)
 {
-	int	ret;
-
 	*table = ft_calloc(1, sizeof(t_table));
 	if (!*table)
-		return (error_quit(*table));
-	ret = 0;
-	if (handle_args(argc, argv, *table))
-		return (error_quit(*table));
-	if (pthread_mutex_init(&(*table)->speak_right, NULL))
-		return (error_quit(*table));
-	if (create_philos(*table))
-		return (error_quit(*table));
-	if (create_forks(*table))
-		return (error_quit(*table));
-	distrubute_forks(*table);
+		return (1);
 	gettimeofday(&(*table)->beginning, NULL);
+	if (handle_args(argc, argv, *table)
+		|| pthread_mutex_init(&(*table)->speak_right, NULL)
+		|| pthread_mutex_init(&(*table)->eat_right, NULL)
+		|| create_philos(*table)
+		|| create_forks(*table))
+		return (1);
 	return (0);
 }
