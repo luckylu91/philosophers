@@ -24,6 +24,8 @@ int	quit_others(t_table *t)
 
 int	kill_and_quit(t_table *t)
 {
+	// (void)t;
+	// return (1);
 	int i;
 
 	i = -1;

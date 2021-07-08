@@ -9,7 +9,13 @@ void	watch_death(t_table *table)
 	while (++i < table->params.n_philo)
 	{
 		waitpid(table->philos_pid[i], &wstatus, 0);
+		printf("*lol*: %d\n", WIFEXITED(wstatus));
+		printf("*lol_sig*: %d\n", WIFSIGNALED(wstatus));
+		if (WIFSIGNALED(wstatus))
+			printf("Term signal = %d\n", WTERMSIG(wstatus));
+		printf("pourtant pid = %d\n", table->philos_pid[i]);
 	}
+	printf("lol_watch\n");
 	sem_post(table->death);
 	exit(0);
 }
@@ -41,5 +47,6 @@ int	launch_simulation(t_table *table)
 	}
 	else
 		return (1);
+	sem_post(table->simulation_can_start);
 	return (0);
 }

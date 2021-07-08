@@ -74,7 +74,6 @@ int		kill_and_quit(t_table *t);
 int		create_table(int argc, char **argv, t_table *table);
 
 // philo_life
-void	init_philo(t_table *table, int i, t_philo *p);
 void	philo_death(t_philo *p);
 void	take_forks(t_philo *p);
 void	putback_forks(t_philo *p);
