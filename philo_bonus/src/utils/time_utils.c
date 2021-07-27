@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: lzins <lzins@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:42:48 by lzins             #+#    #+#             */
-/*   Updated: 2021/07/07 08:45:00 by lzins            ###   ########lyon.fr   */
+/*   Updated: 2021/07/27 18:51:54 by lzins            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,6 @@ void	corrected_sleep(t_philo *p, int duration)
 	while (delta_time(p->action_begining, tv) < duration)
 	{
 		usleep(10);
-		gettimeofday(&tv, NULL);
-		if (delta_time(p->last_eat, tv) >= p->params->t_die)
-			philo_death(p);
 		gettimeofday(&tv, NULL);
 	}
 }

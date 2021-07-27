@@ -4,14 +4,18 @@
 # include <sys/time.h>
 # include <sys/types.h>
 # include <unistd.h>
-# include <limits.h>
 # include <string.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <semaphore.h>
 # include <fcntl.h>
-#include <signal.h>
-#include <sys/wait.h>
+# include <signal.h>
+# include <sys/wait.h>
+# include <pthread.h>
+# include "libft.h"
+
+# define PHILO_DEATH 1
+# define PHILO_DONE 2
 
 typedef struct s_params
 {
@@ -30,12 +34,13 @@ typedef struct s_philo
 	struct timeval	action_begining;
 	int				n_times_eaten;
 	int				stop_when_possible;
-// shared :
+
 	t_params		*params;
 	sem_t			*speak_right;
 	sem_t			*eat_queue;
 	sem_t			*forks;
 	sem_t			*death;
+	sem_t			*last_eat_access;
 	struct timeval	*begining;
 }	t_philo;
 
@@ -48,16 +53,11 @@ typedef struct s_table
 	sem_t			*eat_queue;
 	sem_t			*forks;
 	sem_t			*death;
+	sem_t			**last_eat_access_array;
 	pid_t			*philos_pid;
-	pid_t			death_watcher_pid;
 }	t_table;
 
-// utils
-void	ft_bzero(void *m, size_t size);
-size_t	ft_strlen(const char *s);
-void	ft_putstr_fd(char *s, int fd);
-int		ft_atoi(char *s);
-void	*ft_calloc(size_t n, size_t size);
+//utils
 
 long	delta_time(struct timeval tv1, struct timeval tv2);
 long	tick(t_philo *p);
@@ -69,14 +69,17 @@ int		create_sem(char *name, sem_t **sem_addr, int value);
 
 int		quit_main(t_table *t);
 int		quit_others(t_table *t);
+void	kill_children(t_table *t);
 int		kill_and_quit(t_table *t);
 
 int		create_table(int argc, char **argv, t_table *table);
 
 // philo_life
-void	philo_death(t_philo *p);
+
 void	take_forks(t_philo *p);
 void	putback_forks(t_philo *p);
+struct timeval	get_last_eat(t_philo *p);
+void	set_last_eat(t_philo *p, struct timeval *time_eat);
 
 void	say(t_philo *p, char *message);
 void	tell_end(t_table *table);
@@ -84,10 +87,11 @@ void	tell_end(t_table *table);
 void	philo_life(t_table *table, int i);
 
 // main
+
 int		invalid_numeric_arg(char *arg);
 int		handle_args(int argc, char **argv, t_params *params);
 
-void	watch_death(t_table *table);
+void	wait_children(t_table *table);
 int		launch_simulation(t_table *table);
 
 #endif
