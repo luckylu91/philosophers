@@ -15,6 +15,7 @@ void *philo_death_watching(void *philo_ptr)
 			sem_wait(p->speak_right);
 			printf("%ld %d has died\n", tick(p), p->i_philo);
 			sem_post(p->death);
+			sem_post(p->speak_right);
 			exit(PHILO_DEATH);
 		}
 	}

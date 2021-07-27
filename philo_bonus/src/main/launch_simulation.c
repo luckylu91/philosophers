@@ -19,7 +19,7 @@ int	launch_simulation(t_table *table)
 			return (1);
 		}
 	}
-	printf("(main) all process launched\n");
+	// printf("(main) all process launched\n");
 	i = -1;
 	while (++i < table->params.n_philo)
 		sem_post(table->simulation_can_start);

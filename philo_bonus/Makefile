@@ -1,5 +1,6 @@
 
-FLAGS = -Wall -Wextra -Werror -I.
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -Iinclude
 NAME =	philo
 SUBDIRS = $(addprefix src/, libft main philo_life utils)
 SUBDIRS_OBJ = $(SUBDIRS:src/%=obj/%)
@@ -40,11 +41,11 @@ HEADERS =	$(addprefix include/, philosophers.h libft.h)
 all:	$(NAME)
 
 $(NAME):	$(OBJS) $(HEADERS)
-	gcc -o $@ $(OBJS) $(FLAGS)
+	$(CC) -o $@ $(OBJS) $(CFLAGS)
 
 
 obj/%.o:	src/%.c
-	$(CC) -o $@  -c $< $(IFLAGS) $(CFLAGS)
+	$(CC) -o $@  -c $< $(CFLAGS)
 $(OBJS):	| $(SUBDIRS_OBJ)
 
 $(SUBDIRS_OBJ):

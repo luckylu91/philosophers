@@ -84,6 +84,9 @@ void	set_last_eat(t_philo *p, struct timeval *time_eat);
 void	say(t_philo *p, char *message);
 void	tell_end(t_table *table);
 
+void	init_philo(t_table *table, int i, t_philo *p);
+void	philo_eat(t_philo *p);
+void	philo_sleep(t_philo *p);
 void	philo_life(t_table *table, int i);
 
 // main

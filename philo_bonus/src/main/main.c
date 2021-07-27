@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 		return (quit_main(&table));
 	if (table.params.n_times_eat == 0)
 	{
-		printf("Each philosophers ate 0 time. What a shame...");
+		printf("Each philosophers ate 0 time. What a shame...\n");
 		return (quit_main(&table));
 	}
 	if (launch_simulation(&table))
