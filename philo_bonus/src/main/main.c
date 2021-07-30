@@ -5,6 +5,7 @@ void	*waiting_death(void *table_ptr)
 	sem_wait(((t_table *)table_ptr)->death);
 	kill_children(table_ptr);
 	wait_children(table_ptr);
+	sem_post(((t_table *)table_ptr)->speak_right);
 	return (NULL);
 }
 
