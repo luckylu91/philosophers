@@ -24,7 +24,7 @@ int	quit_main(t_table *t)
 
 int	quit_others(t_table *t)
 {
-	int i;
+	int	i;
 
 	sem_close(t->simulation_can_start);
 	sem_close(t->speak_right);
@@ -41,7 +41,7 @@ int	quit_others(t_table *t)
 
 void	kill_children(t_table *t)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < t->params.n_philo)

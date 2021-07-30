@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_stricpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lzins <lzins@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/27 18:22:09 by lzins             #+#    #+#             */
-/*   Updated: 2021/07/27 18:36:00 by lzins            ###   ########.fr       */
+/*   Updated: 2021/07/30 15:28:12 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 static void	compute_digits(int n, int sgn, int *size, char *digits)
 {

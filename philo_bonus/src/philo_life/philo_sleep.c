@@ -7,4 +7,3 @@ void	philo_sleep(t_philo *p)
 	say(p, "is sleeping");
 	corrected_sleep(p, p->params->t_sleep);
 }
-

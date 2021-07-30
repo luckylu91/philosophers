@@ -4,8 +4,6 @@ void	*waiting_death(void *table_ptr)
 {
 	sem_wait(((t_table *)table_ptr)->death);
 	kill_children(table_ptr);
-	wait_children(table_ptr);
-	sem_post(((t_table *)table_ptr)->speak_right);
 	return (NULL);
 }
 
@@ -17,15 +15,12 @@ void	*waiting_end(void *table_ptr)
 	return (NULL);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_table		table;
 	pthread_t	watcher_death;
 	pthread_t	watcher_end;
 
-	// //
-	// setbuf(stdout, NULL);
-	// //
 	if (create_table(argc, argv, &table))
 		return (quit_main(&table));
 	if (table.params.n_times_eat == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   crate_table.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lzins <lzins@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lzins <lzins@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 23:51:32 by lzins             #+#    #+#             */
-/*   Updated: 2021/07/27 18:40:15 by lzins            ###   ########.fr       */
+/*   Updated: 2021/07/30 15:33:34 by lzins            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static int	create_philos(t_table *table)
 	table->philos_pid = ft_calloc(table->params.n_philo, sizeof(pid_t));
 	if (!table->philos_pid)
 		return (-1);
-	table->last_eat_access_array = ft_calloc(table->params.n_philo, sizeof(sem_t *));
+	table->last_eat_access_array = \
+		ft_calloc(table->params.n_philo, sizeof(sem_t *));
 	if (!table->last_eat_access_array)
 		return (-1);
 	sem_name_end = ft_stpcpy(sem_name, "/philo_last_eat_access_");
